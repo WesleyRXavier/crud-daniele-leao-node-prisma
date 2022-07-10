@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Book {
+  id          String @id @default(uuid())
+  title       String
+  description String
+  bar_code    String @unique
+
+  @@map("books")
+}
+
+model User {
+  id     String  @id @default(uuid())
+  name   String
+  email  String  @unique
+  cpf    String  @unique
+  groups Group[]
+
+  @@map("users")
+}
+
+model Group {
+  id          String @id @default(uuid())
+  name        String
+  description String
+
+  User  User?   @relation(fields: [admin], references: [id])
+  admin String?
+  @@map("groups")
+}
